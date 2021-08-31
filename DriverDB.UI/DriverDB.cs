@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DriverDB.Core;
 using System.Windows.Forms;
-using System.IO;
-
 
 namespace DriverDB.UI
 {
@@ -46,13 +38,35 @@ namespace DriverDB.UI
 
         private static ListViewItem CreateListItem(Driver aDriver, string DateFormat = "MM/dd/yyyy")
         {
-            return new ListViewItem(new[]
+            ListViewItem ListItem = new ListViewItem(new[]
             {
                     aDriver.DriverName,
                     aDriver.License.ExpirationDate.ToString(DateFormat),
                     aDriver.MVR.ExpirationDate.ToString(DateFormat),
                     aDriver.MedicalCard.ExpirationDate.ToString(DateFormat)
             });
+
+            if (aDriver.License.IsExpired())
+            {
+                ListItem.SubItems[1].BackColor = Color.FromKnownColor(KnownColor.Red);
+                ListItem.SubItems[1].ForeColor = Color.FromKnownColor(KnownColor.White);
+            }
+
+            if (aDriver.MVR.IsExpired())
+            {
+                ListItem.SubItems[2].BackColor = Color.FromKnownColor(KnownColor.Red);
+                ListItem.SubItems[2].ForeColor = Color.FromKnownColor(KnownColor.White);
+            }
+
+            if (aDriver.MedicalCard.IsExpired())
+            {
+                ListItem.SubItems[3].BackColor = Color.FromKnownColor(KnownColor.Red);
+                ListItem.SubItems[3].ForeColor = Color.FromKnownColor(KnownColor.White);
+            }
+
+            ListItem.UseItemStyleForSubItems = false;
+
+            return ListItem;
         }
 
         public void PopulateExpiredDrivers()

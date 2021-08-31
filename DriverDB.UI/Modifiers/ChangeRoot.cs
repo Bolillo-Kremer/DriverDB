@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using DriverDB.Core;
-using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace DriverDB.UI
 {

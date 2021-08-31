@@ -147,6 +147,7 @@ namespace DriverDB.UI
             this.ChooseLicenseExpiration.Name = "ChooseLicenseExpiration";
             this.ChooseLicenseExpiration.Size = new System.Drawing.Size(200, 20);
             this.ChooseLicenseExpiration.TabIndex = 12;
+            this.ChooseLicenseExpiration.ValueChanged += new System.EventHandler(this.ChooseLicenseExpiration_ValueChanged);
             // 
             // ChooseMVRExpiration
             // 
@@ -154,6 +155,7 @@ namespace DriverDB.UI
             this.ChooseMVRExpiration.Name = "ChooseMVRExpiration";
             this.ChooseMVRExpiration.Size = new System.Drawing.Size(200, 20);
             this.ChooseMVRExpiration.TabIndex = 13;
+            this.ChooseMVRExpiration.ValueChanged += new System.EventHandler(this.ChooseMVRExpiration_ValueChanged);
             // 
             // ChooseMedCardExpiration
             // 
@@ -161,6 +163,7 @@ namespace DriverDB.UI
             this.ChooseMedCardExpiration.Name = "ChooseMedCardExpiration";
             this.ChooseMedCardExpiration.Size = new System.Drawing.Size(200, 20);
             this.ChooseMedCardExpiration.TabIndex = 14;
+            this.ChooseMedCardExpiration.ValueChanged += new System.EventHandler(this.ChooseMedCardExpiration_ValueChanged);
             // 
             // SaveDriver
             // 

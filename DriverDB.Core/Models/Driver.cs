@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json.Linq;
-using System.Drawing;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using DriverDB.Core.Exceptions;

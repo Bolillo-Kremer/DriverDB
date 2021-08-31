@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using DriverDB.Core;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace DriverDB.UI
 {
     public partial class AddDriver : Form
     {
         public Driver Existing = null;
+
         public AddDriver(Driver aDriver = null)
         {
             InitializeComponent();
+            
             if (aDriver != null)
             {
                 Existing = aDriver;
@@ -31,25 +27,34 @@ namespace DriverDB.UI
                 ChooseMVRExpiration.Value = Existing.MVR.ExpirationDate;
                 ChooseMedCardExpiration.Value = Existing.MedicalCard.ExpirationDate;
             }
+            else
+            {
+                ChooseLicenseExpiration.Value = DateTime.Today.AddDays(1);
+                ChooseMVRExpiration.Value = DateTime.Today.AddDays(1);
+                ChooseMedCardExpiration.Value = DateTime.Today.AddDays(1);
+            }
+
+            CheckExpirationDates();
         }
+
 
         #region Button Clicks
 
         private void ChooseLicenseImage_Click(object sender, EventArgs e)
         {
-            string Dir = Dialogs.OpenFile(this, LicenseImageInput.Text);
+            string Dir = Dialogs.OpenFile(this, LicenseImageInput.Text, false, Dialogs.ImageFilter);
             LicenseImageInput.Text = (Dir.Length > 0) ? Dir: LicenseImageInput.Text;
         }
 
         private void ChooseMVRImage_Click(object sender, EventArgs e)
         {
-            string Dir = Dialogs.OpenFile(this, MVRImageInput.Text);
+            string Dir = Dialogs.OpenFile(this, MVRImageInput.Text, false, Dialogs.ImageFilter);
             MVRImageInput.Text = (Dir.Length > 0) ? Dir : MVRImageInput.Text;
         }
 
         private void ChooseMedCardImage_Click(object sender, EventArgs e)
         {
-            string Dir = Dialogs.OpenFile(this, MedCardImageInput.Text);
+            string Dir = Dialogs.OpenFile(this, MedCardImageInput.Text, false, Dialogs.ImageFilter);
             MedCardImageInput.Text = (Dir.Length > 0) ? Dir : MedCardImageInput.Text;
         }
 
@@ -79,5 +84,64 @@ namespace DriverDB.UI
         }
 
         #endregion Button Clicks
+
+        #region Methods
+
+        private void CheckExpirationDates()
+        {
+            if (ChooseLicenseExpiration.Value <= DateTime.Now)
+            {
+                LicenseImageInput.BackColor = Color.FromKnownColor(KnownColor.Red);
+                LicenseImageInput.ForeColor = Color.FromKnownColor(KnownColor.White);
+            }
+            else
+            {
+                LicenseImageInput.BackColor = Color.FromKnownColor(KnownColor.White);
+                LicenseImageInput.ForeColor = Color.FromKnownColor(KnownColor.Black);
+            }
+
+            if (ChooseMVRExpiration.Value <= DateTime.Now)
+            {
+                MVRImageInput.BackColor = Color.FromKnownColor(KnownColor.Red);
+                MVRImageInput.ForeColor = Color.FromKnownColor(KnownColor.White);
+            }
+            else
+            {
+                MVRImageInput.BackColor = Color.FromKnownColor(KnownColor.White);
+                MVRImageInput.ForeColor = Color.FromKnownColor(KnownColor.Black);
+            }
+
+            if (ChooseMedCardExpiration.Value <= DateTime.Now)
+            {
+                MedCardImageInput.BackColor = Color.FromKnownColor(KnownColor.Red);
+                MedCardImageInput.ForeColor = Color.FromKnownColor(KnownColor.White);
+            }
+            else
+            {
+                MedCardImageInput.BackColor = Color.FromKnownColor(KnownColor.White);
+                MedCardImageInput.ForeColor = Color.FromKnownColor(KnownColor.Black);
+            }
+        }
+
+        #endregion Methods
+
+        #region Selectors
+
+        private void ChooseLicenseExpiration_ValueChanged(object sender, EventArgs e)
+        {
+            CheckExpirationDates();
+        }
+
+        private void ChooseMVRExpiration_ValueChanged(object sender, EventArgs e)
+        {
+            CheckExpirationDates();
+        }
+
+        private void ChooseMedCardExpiration_ValueChanged(object sender, EventArgs e)
+        {
+            CheckExpirationDates();
+        }
+
+        #endregion Selectors
     }
 }
