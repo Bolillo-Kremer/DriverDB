@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System.Drawing;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using DriverDB.Core.Exceptions;
 
 namespace DriverDB.Core
 {
@@ -61,13 +62,27 @@ namespace DriverDB.Core
         private Driver(string aDriverName)
         {
             string Root = AppData.CheckRoot();
+            try
+            {
+                if (Directory.Exists(Root + $@"\{aDriverName}"))
+                {
+                    JObject DriverData = JObject.Parse(File.ReadAllText(Root + $@"\{aDriverName}\data\DriverData.json"));
 
-            JObject DriverData = JObject.Parse(File.ReadAllText(Root + $@"\{aDriverName}\data\DriverData.json"));
+                    this.driverName = aDriverName;
+                    this.license = new DriverImage(Root + $@"\{aDriverName}\License.png", DriverData["LicenseExpiration"].Value<DateTime>());
+                    this.mvr = new DriverImage(Root + $@"\{aDriverName}\MVR.png", DriverData["MVRExpiration"].Value<DateTime>());
+                    this.medicalCard = new DriverImage(Root + $@"\{aDriverName}\MedicalCard.png", DriverData["MedicalCardExpiration"].Value<DateTime>());
+                }
+                else
+                {
+                    throw new DriverDoesntExist(aDriverName);
+                }
 
-            this.driverName = aDriverName;
-            this.license = new DriverImage(Root + $@"\{aDriverName}\License.png", DriverData["LicenseExpiration"].Value<DateTime>());
-            this.mvr = new DriverImage(Root + $@"\{aDriverName}\MVR.png", DriverData["MVRExpiration"].Value<DateTime>());
-            this.medicalCard = new DriverImage(Root + $@"\{aDriverName}\MedicalCard.png", DriverData["MedicalCardExpiration"].Value<DateTime>());
+            }
+            catch (Exception e)
+            {
+                throw new CouldntBuildDriver(aDriverName, e);
+            } 
         }
 
         #endregion Constructors

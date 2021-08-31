@@ -12,8 +12,9 @@ namespace DriverDB.Core
     public static class AppData
     {
         #region Properties
-        private static string DataDirectory { get; } = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + @"\DriverDB.Core\Data";
-        private static string SettingsDirectory { get; } = $@"{DataDirectory}\AppData.json";
+
+        public static string DataDirectory { get; } = Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\DriverDB\Data").FullName;
+        public static string SettingsDirectory { get; } = $@"{DataDirectory}\AppData.json";
 
         /// <summary>
         /// The root directory for DriverDB
@@ -22,10 +23,18 @@ namespace DriverDB.Core
         {
             get
             {
+                if (!File.Exists(SettingsDirectory))
+                {
+                    CreateAppDataFile();
+                }
                 return GetSetting<string>("root");
             }
             set
             {
+                if (!File.Exists(SettingsDirectory))
+                {
+                    CreateAppDataFile();
+                }
                 SetSetting("root", value);
             }
         }
@@ -68,6 +77,17 @@ namespace DriverDB.Core
             }
         }
 
+        private static void CreateAppDataFile()
+        {
+            using (StreamWriter SettingsStream = File.CreateText(SettingsDirectory))
+            {
+                new JsonSerializer().Serialize(SettingsStream, JObject.FromObject(new
+                {
+                    root = ""
+                }));
+            }
+        }
+
         private static void SetSetting(string Key, string Value)
         {
             SetJSONValue(SettingsDirectory, Key, Value);
@@ -87,6 +107,6 @@ namespace DriverDB.Core
             return R;
         }
 
-        #endregion Methods
+#endregion Methods
     }
 }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DriverDB.Core;
 using System.Windows.Forms;
+using System.IO;
 
 
 namespace DriverDB.UI
@@ -25,7 +26,6 @@ namespace DriverDB.UI
         public DriverDB()
         {
             InitializeComponent();
-
             try
             {
                 this.Root = AppData.CheckRoot();
