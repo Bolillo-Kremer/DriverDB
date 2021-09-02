@@ -14,6 +14,11 @@ namespace DriverDB.Core
     public class Driver
     {
         #region Properties
+        private List<DriverImage> oldDriverImages = new List<DriverImage>();
+        /// <summary>
+        /// Old driver images
+        /// </summary>
+        public List<DriverImage> OldDriverImages => oldDriverImages;
 
         private string driverName { get; set; } = string.Empty;
         /// <summary>
@@ -21,18 +26,21 @@ namespace DriverDB.Core
         /// </summary>
         public string DriverName => driverName;
 
+        private DriverImage licenseOld { get; set; } = null;
         private DriverImage license { get; set; } = null;
         /// <summary>
         /// The drivers license image and expiration date
         /// </summary>
         public DriverImage License => license;
 
+        private DriverImage mvrOld { get; set; } = null;
         private DriverImage mvr { get; set; } = null;
         /// <summary>
         /// The drivers MVR image and expiration date
         /// </summary>
         public DriverImage MVR => mvr;
 
+        private DriverImage medicalCardOld { get; set; } = null;
         private DriverImage medicalCard { get; set; } = null;
         /// <summary>
         /// The drivers medical card image and expiration date
@@ -54,8 +62,11 @@ namespace DriverDB.Core
         {
             this.driverName = aDriverName;
             this.license = aLicense;
+            this.license.DriverImageType = ImageType.License;
             this.mvr = aMVR;
+            this.mvr.DriverImageType = ImageType.MVR;
             this.medicalCard = aMedicalCard;
+            this.medicalCard.DriverImageType = ImageType.MedicalCard;
         }
 
         private Driver(string aDriverName)
@@ -68,9 +79,17 @@ namespace DriverDB.Core
                     JObject DriverData = JObject.Parse(File.ReadAllText(Root + $@"\{aDriverName}\data\DriverData.json"));
 
                     this.driverName = aDriverName;
-                    this.license = new DriverImage(Root + $@"\{aDriverName}\License.png", DriverData["LicenseExpiration"].Value<DateTime>());
-                    this.mvr = new DriverImage(Root + $@"\{aDriverName}\MVR.png", DriverData["MVRExpiration"].Value<DateTime>());
-                    this.medicalCard = new DriverImage(Root + $@"\{aDriverName}\MedicalCard.png", DriverData["MedicalCardExpiration"].Value<DateTime>());
+                    this.license = new DriverImage(Root + $@"\{aDriverName}\License{DriverData["LicenseExtension"]}", DriverData["LicenseExpiration"].Value<DateTime>());
+                    this.mvr = new DriverImage(Root + $@"\{aDriverName}\MVR{DriverData["MVRExtension"]}", DriverData["MVRExpiration"].Value<DateTime>());
+                    this.medicalCard = new DriverImage(Root + $@"\{aDriverName}\MedicalCard{DriverData["MedicalCardExtension"]}", DriverData["MedicalCardExpiration"].Value<DateTime>());
+
+                    foreach (FileInfo aFile in Directory.CreateDirectory(Root + $@"\{aDriverName}\Old").GetFiles())
+                    {
+                        string[] Parts = aFile.Name.Split('-');
+                        string DateString = $"{Parts[1]}/{Parts[2]}/{Parts[3].Split('.')[0]}";
+                        DateTime OldDate = DateTime.Parse(DateString);
+                        oldDriverImages.Add(new DriverImage(aFile.FullName, OldDate, (ImageType)Enum.Parse(typeof(ImageType), Parts[0])));
+                    }
                 }
                 else
                 {
@@ -109,7 +128,12 @@ namespace DriverDB.Core
 
             foreach (string aDriver in Directory.GetDirectories(Root))
             {
-                DriverData.Add(Driver.GetExisting(aDriver.Replace(Root + "\\", "")));
+                try
+                {
+                    DriverData.Add(Driver.GetExisting(aDriver.Replace(Root + "\\", "")));
+                }
+                catch
+                { }
             }
 
             return DriverData.ToArray();
@@ -162,8 +186,17 @@ namespace DriverDB.Core
         /// </summary>
         /// <param name="aLicense">The Drivers License</param>
         public void UpdateLicense(DriverImage aLicense)
-        {
-            this.license = aLicense;
+        {         
+            if (aLicense != null)
+            {
+                this.licenseOld = this.license;
+                this.license = aLicense;
+                this.license.DriverImageType = ImageType.License;
+            }
+            else
+            {
+                throw new NullDriverImage();
+            }
         }
 
         /// <summary>
@@ -181,8 +214,17 @@ namespace DriverDB.Core
         /// </summary>
         /// <param name="aMVR">Drivers MVR</param>
         public void UpdateMVR(DriverImage aMVR)
-        {
-            this.mvr = aMVR;
+        {         
+            if (aMVR != null)
+            {
+                this.mvrOld = this.mvr;
+                this.mvr = aMVR;
+                this.mvr.DriverImageType = ImageType.MVR;
+            }          
+            else
+            {
+                throw new NullDriverImage();
+            }
         }
 
         /// <summary>
@@ -201,7 +243,17 @@ namespace DriverDB.Core
         /// <param name="aMedicalCard">Drivers Medical Card</param>
         public void UpdateMedicalCard(DriverImage aMedicalCard)
         {
-            this.medicalCard = aMedicalCard;
+            if (aMedicalCard != null)
+            {
+                this.medicalCardOld = this.medicalCard;
+                this.medicalCard = aMedicalCard;
+                this.medicalCard.DriverImageType = ImageType.MedicalCard;
+            }
+            else
+            {
+                throw new NullDriverImage();
+            }
+            
         }
 
         /// <summary>
@@ -248,15 +300,34 @@ namespace DriverDB.Core
 
             string DriverDirectory = Directory.CreateDirectory(Root + $@"\{this.DriverName}").FullName;
             Directory.CreateDirectory(DriverDirectory + @"\data").Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+            Directory.CreateDirectory(DriverDirectory + @"\Old");
 
             using (StreamWriter SettingsStream = File.CreateText(DriverDirectory + @"\data\DriverData.json"))
             {
                 new JsonSerializer().Serialize(SettingsStream, JObject.FromObject(this.ToObject()));
             }
 
-            this.license.SaveImage(DriverDirectory + @"\License.png");
-            this.mvr.SaveImage(DriverDirectory + @"\MVR.png");
-            this.medicalCard.SaveImage(DriverDirectory + @"\MedicalCard.png");
+            if (this.licenseOld != null)
+            {
+                this.licenseOld.SaveImage(DriverDirectory + $@"\Old\License-{this.licenseOld.ExpirationDate.ToString("MM'-'dd'-'yyyy")}{this.licenseOld.FileExtension}");
+                this.oldDriverImages.Add(this.licenseOld);
+            }
+
+            if (this.mvrOld != null)
+            {
+                this.mvrOld.SaveImage(DriverDirectory + $@"\Old\MVR-{this.mvrOld.ExpirationDate.ToString("MM'-'dd'-'yyyy")}{this.mvrOld.FileExtension}");
+                this.oldDriverImages.Add(this.mvrOld);
+            }
+
+            if (this.medicalCardOld != null)
+            {
+                this.medicalCardOld.SaveImage(DriverDirectory + $@"\Old\MedicalCard-{this.medicalCardOld.ExpirationDate.ToString("MM'-'dd'-'yyyy")}{this.medicalCardOld.FileExtension}");
+                this.oldDriverImages.Add(this.medicalCardOld);
+            }
+
+            this.license.SaveImage(DriverDirectory + $@"\License{this.license.FileExtension}");
+            this.mvr.SaveImage(DriverDirectory + $@"\MVR{this.mvr.FileExtension}");
+            this.medicalCard.SaveImage(DriverDirectory + $@"\MedicalCard{this.medicalCard.FileExtension}");
         }
 
         /// <summary>
@@ -277,8 +348,11 @@ namespace DriverDB.Core
             return new
             {
                 LicenseExpiration = this.license.ExpirationDate.ToString(),
+                LicenseExtension = this.license.FileExtension,
                 MVRExpiration = this.mvr.ExpirationDate.ToString(),
-                MedicalCardExpiration = this.medicalCard.ExpirationDate.ToString()
+                MVRExtension = this.mvr.FileExtension,
+                MedicalCardExpiration = this.medicalCard.ExpirationDate.ToString(),
+                MedicalCardExtension = this.medicalCard.FileExtension
             };
         }
 

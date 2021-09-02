@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using DriverDB.Core.Exceptions;
 
 namespace DriverDB.Core
 {
@@ -12,11 +13,28 @@ namespace DriverDB.Core
     {
         #region Properties
 
+        /// <summary>
+        /// The Type of <see cref="DriverImage"/>
+        /// </summary>
+        public ImageType DriverImageType;
+
         private string filePath;
+        /// <summary>
+        /// The current path to the Image file
+        /// </summary>
         public string FilePath => filePath;
 
         private DateTime expirationDate;
+        /// <summary>
+        /// The Expiration date of the image
+        /// </summary>
         public DateTime ExpirationDate => expirationDate;
+
+        private string fileExtension;
+        /// <summary>
+        /// The file extension of the image
+        /// </summary>
+        public string FileExtension => fileExtension;
 
         #endregion Properties
 
@@ -32,22 +50,39 @@ namespace DriverDB.Core
             if (File.Exists(aFilePath))
             {
                 this.filePath = Path.GetFullPath(aFilePath);
+                this.fileExtension = Path.GetExtension(aFilePath);
             }          
+            else
+            {
+                throw new MissingFile(aFilePath);
+            }
             this.expirationDate = aExpirationDate;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="DriverImage"/>
+        /// </summary>
+        /// <param name="aFilePath">The path to the image file</param>
+        /// <param name="aExpirationDate">The expiration date</param>
+        /// <param name="aImageType">The Type of <see cref="DriverImage"/></param>
+        public DriverImage(string aFilePath, DateTime aExpirationDate, ImageType aImageType)
+        {
+            if (File.Exists(aFilePath))
+            {
+                this.filePath = Path.GetFullPath(aFilePath);
+                this.fileExtension = Path.GetExtension(aFilePath);
+            }
+            else
+            {
+                throw new MissingFile(aFilePath);
+            }
+            this.expirationDate = aExpirationDate;
+            this.DriverImageType = aImageType;
         }
 
         #endregion Constructors
 
         #region Methods
-
-        /// <summary>
-        /// Updates the expiration date of the <see cref="DriverImage"/>
-        /// </summary>
-        /// <param name="aExpirationDate">New expiration date</param>
-        public void UpdateExpirationDate(DateTime aExpirationDate)
-        {
-            this.expirationDate = aExpirationDate;
-        }
 
         /// <summary>
         /// Checks if this <see cref="DriverImage"/> is expired
@@ -82,6 +117,7 @@ namespace DriverDB.Core
                 Image NewImage = Image.FromFile(this.filePath);
                 NewImage.Save(SaveDir);
                 NewImage.Dispose();
+                this.filePath = SaveDir;
             }
         }
         #endregion Methods

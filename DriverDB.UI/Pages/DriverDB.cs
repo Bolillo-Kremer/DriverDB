@@ -98,9 +98,17 @@ namespace DriverDB.UI
 
         private void OpenDriver_Click(object sender, EventArgs e)
         {
-            new AddDriver(Driver.GetExisting(Dialogs.OpenFile(this, Root, true).Replace(Root + "\\", ""))).Show();
+            string Path = Dialogs.OpenFile(this, Root, true).Replace(Root + "\\", "");
+            if (!(Path == "" || Path == null))
+            {
+                new AddDriver(Driver.GetExisting(Path)).Show();
+            }      
         }
 
+        private void SearchOld_Click(object sender, EventArgs e)
+        {
+            new SearchOld().Show();
+        }
 
         private void Exit_Click(object sender, EventArgs e)
         {

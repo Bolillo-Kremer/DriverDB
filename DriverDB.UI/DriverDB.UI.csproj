@@ -53,33 +53,39 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Dialogs.cs" />
-    <Compile Include="Modifiers\AddDriver.cs">
+    <Compile Include="Pages\AddDriver.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modifiers\AddDriver.Designer.cs">
+    <Compile Include="Pages\AddDriver.Designer.cs">
       <DependentUpon>AddDriver.cs</DependentUpon>
     </Compile>
-    <Compile Include="Modifiers\ChangeRoot.cs">
+    <Compile Include="Pages\ChangeRoot.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modifiers\ChangeRoot.Designer.cs">
+    <Compile Include="Pages\ChangeRoot.Designer.cs">
       <DependentUpon>ChangeRoot.cs</DependentUpon>
     </Compile>
-    <Compile Include="DriverDB.cs">
+    <Compile Include="Pages\DriverDB.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DriverDB.Designer.cs">
+    <Compile Include="Pages\DriverDB.Designer.cs">
       <DependentUpon>DriverDB.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="DriverDB.resx">
+    <Compile Include="Pages\SearchOld.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Pages\SearchOld.Designer.cs">
+      <DependentUpon>SearchOld.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Pages\DriverDB.resx">
       <DependentUpon>DriverDB.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modifiers\AddDriver.resx">
+    <EmbeddedResource Include="Pages\AddDriver.resx">
       <DependentUpon>AddDriver.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Modifiers\ChangeRoot.resx">
+    <EmbeddedResource Include="Pages\ChangeRoot.resx">
       <DependentUpon>ChangeRoot.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -91,6 +97,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Pages\SearchOld.resx">
+      <DependentUpon>SearchOld.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

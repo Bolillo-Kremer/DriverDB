@@ -42,19 +42,19 @@ namespace DriverDB.UI
 
         private void ChooseLicenseImage_Click(object sender, EventArgs e)
         {
-            string Dir = Dialogs.OpenFile(this, LicenseImageInput.Text, false, Dialogs.ImageFilter);
+            string Dir = Dialogs.OpenFile(this, LicenseImageInput.Text);
             LicenseImageInput.Text = (Dir.Length > 0) ? Dir: LicenseImageInput.Text;
         }
 
         private void ChooseMVRImage_Click(object sender, EventArgs e)
         {
-            string Dir = Dialogs.OpenFile(this, MVRImageInput.Text, false, Dialogs.ImageFilter);
+            string Dir = Dialogs.OpenFile(this, MVRImageInput.Text);
             MVRImageInput.Text = (Dir.Length > 0) ? Dir : MVRImageInput.Text;
         }
 
         private void ChooseMedCardImage_Click(object sender, EventArgs e)
         {
-            string Dir = Dialogs.OpenFile(this, MedCardImageInput.Text, false, Dialogs.ImageFilter);
+            string Dir = Dialogs.OpenFile(this, MedCardImageInput.Text);
             MedCardImageInput.Text = (Dir.Length > 0) ? Dir : MedCardImageInput.Text;
         }
 
