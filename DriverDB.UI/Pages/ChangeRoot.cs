@@ -16,7 +16,7 @@ namespace DriverDB.UI
 
         private void ChooseDirectory_Click(object sender, EventArgs e)
         {
-            string Dir = Dialogs.OpenFile(this, RootInput.Text, true);
+            string Dir = Connections.OpenFile(this, RootInput.Text, true);
             RootInput.Text = (Dir.Length > 0) ? Dir : RootInput.Text;
         }
 

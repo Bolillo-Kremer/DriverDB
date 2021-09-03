@@ -33,6 +33,7 @@ namespace DriverDB.UI
             this.DriverName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ImageType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ExpDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.FilePath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.DriverNameText = new System.Windows.Forms.TextBox();
             this.drvrNmLbl = new System.Windows.Forms.Label();
             this.SelectImageType = new System.Windows.Forms.ComboBox();
@@ -43,8 +44,6 @@ namespace DriverDB.UI
             this.StartDate = new System.Windows.Forms.DateTimePicker();
             this.SortByLbl = new System.Windows.Forms.Label();
             this.SelectSortBy = new System.Windows.Forms.ComboBox();
-            this.Search = new System.Windows.Forms.Button();
-            this.FilePath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // OldDrivers
@@ -61,7 +60,6 @@ namespace DriverDB.UI
             this.OldDrivers.TabIndex = 0;
             this.OldDrivers.UseCompatibleStateImageBehavior = false;
             this.OldDrivers.View = System.Windows.Forms.View.Details;
-            this.OldDrivers.SelectedIndexChanged += new System.EventHandler(this.OldDrivers_SelectedIndexChanged);
             this.OldDrivers.DoubleClick += new System.EventHandler(this.OldDrivers_DoubleClick);
             // 
             // DriverName
@@ -79,12 +77,18 @@ namespace DriverDB.UI
             this.ExpDate.Text = "Expiration Date";
             this.ExpDate.Width = 115;
             // 
+            // FilePath
+            // 
+            this.FilePath.Text = "File Path";
+            this.FilePath.Width = 231;
+            // 
             // DriverNameText
             // 
             this.DriverNameText.Location = new System.Drawing.Point(84, 15);
             this.DriverNameText.Name = "DriverNameText";
             this.DriverNameText.Size = new System.Drawing.Size(199, 20);
             this.DriverNameText.TabIndex = 1;
+            this.DriverNameText.TextChanged += new System.EventHandler(this.DriverNameText_TextChanged);
             // 
             // drvrNmLbl
             // 
@@ -107,6 +111,7 @@ namespace DriverDB.UI
             this.SelectImageType.Name = "SelectImageType";
             this.SelectImageType.Size = new System.Drawing.Size(199, 21);
             this.SelectImageType.TabIndex = 7;
+            this.SelectImageType.SelectedIndexChanged += new System.EventHandler(this.SelectImageType_SelectedIndexChanged);
             // 
             // ImageTypeLbl
             // 
@@ -132,6 +137,7 @@ namespace DriverDB.UI
             this.EndDate.Name = "EndDate";
             this.EndDate.Size = new System.Drawing.Size(199, 20);
             this.EndDate.TabIndex = 11;
+            this.EndDate.ValueChanged += new System.EventHandler(this.EndDate_ValueChanged);
             // 
             // StartDateLbl
             // 
@@ -148,6 +154,7 @@ namespace DriverDB.UI
             this.StartDate.Name = "StartDate";
             this.StartDate.Size = new System.Drawing.Size(199, 20);
             this.StartDate.TabIndex = 9;
+            this.StartDate.ValueChanged += new System.EventHandler(this.StartDate_ValueChanged);
             // 
             // SortByLbl
             // 
@@ -168,28 +175,13 @@ namespace DriverDB.UI
             this.SelectSortBy.Name = "SelectSortBy";
             this.SelectSortBy.Size = new System.Drawing.Size(199, 21);
             this.SelectSortBy.TabIndex = 13;
-            // 
-            // Search
-            // 
-            this.Search.Location = new System.Drawing.Point(133, 225);
-            this.Search.Name = "Search";
-            this.Search.Size = new System.Drawing.Size(75, 23);
-            this.Search.TabIndex = 15;
-            this.Search.Text = "Search";
-            this.Search.UseVisualStyleBackColor = true;
-            this.Search.Click += new System.EventHandler(this.Search_Click);
-            // 
-            // FilePath
-            // 
-            this.FilePath.Text = "File Path";
-            this.FilePath.Width = 231;
+            this.SelectSortBy.SelectedIndexChanged += new System.EventHandler(this.SelectSortBy_SelectedIndexChanged);
             // 
             // SearchOld
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(790, 450);
-            this.Controls.Add(this.Search);
             this.Controls.Add(this.SortByLbl);
             this.Controls.Add(this.SelectSortBy);
             this.Controls.Add(this.EndDateLbl);
@@ -224,7 +216,6 @@ namespace DriverDB.UI
         private System.Windows.Forms.DateTimePicker StartDate;
         private System.Windows.Forms.Label SortByLbl;
         private System.Windows.Forms.ComboBox SelectSortBy;
-        private System.Windows.Forms.Button Search;
         private System.Windows.Forms.ColumnHeader FilePath;
     }
 }

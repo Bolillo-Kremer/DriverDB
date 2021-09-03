@@ -98,10 +98,10 @@ namespace DriverDB.UI
 
         private void OpenDriver_Click(object sender, EventArgs e)
         {
-            string Path = Dialogs.OpenFile(this, Root, true).Replace(Root + "\\", "");
+            string Path = Connections.OpenFile(this, Root, true).Replace(Root + "\\", "");
             if (!(Path == "" || Path == null))
             {
-                new AddDriver(Driver.GetExisting(Path)).Show();
+                new AddDriver(Driver.GetExisting(Path, true)).Show();
             }      
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace DriverDB.Core
 {
-    public enum ImageType
+    public enum DriverFileType
     {
         License,
         MVR,

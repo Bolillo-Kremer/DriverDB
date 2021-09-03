@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using DriverDB.Core;
-using Microsoft.WindowsAPICodePack.Dialogs;
+using System.IO;
 
 namespace DriverDB.UI
 {
@@ -37,24 +37,23 @@ namespace DriverDB.UI
             CheckExpirationDates();
         }
 
-
         #region Button Clicks
 
         private void ChooseLicenseImage_Click(object sender, EventArgs e)
         {
-            string Dir = Dialogs.OpenFile(this, LicenseImageInput.Text);
+            string Dir = Connections.OpenFile(this, Path.GetDirectoryName(LicenseImageInput.Text));
             LicenseImageInput.Text = (Dir.Length > 0) ? Dir: LicenseImageInput.Text;
         }
 
         private void ChooseMVRImage_Click(object sender, EventArgs e)
         {
-            string Dir = Dialogs.OpenFile(this, MVRImageInput.Text);
+            string Dir = Connections.OpenFile(this, Path.GetDirectoryName(MVRImageInput.Text));
             MVRImageInput.Text = (Dir.Length > 0) ? Dir : MVRImageInput.Text;
         }
 
         private void ChooseMedCardImage_Click(object sender, EventArgs e)
         {
-            string Dir = Dialogs.OpenFile(this, MedCardImageInput.Text);
+            string Dir = Connections.OpenFile(this, Path.GetDirectoryName(MedCardImageInput.Text));
             MedCardImageInput.Text = (Dir.Length > 0) ? Dir : MedCardImageInput.Text;
         }
 
@@ -70,9 +69,9 @@ namespace DriverDB.UI
             else
             {
                 new Driver(DriverNameInput.Text,
-                    new DriverImage(LicenseImageInput.Text, ChooseLicenseExpiration.Value),
-                    new DriverImage(MVRImageInput.Text, ChooseMVRExpiration.Value),
-                    new DriverImage(MedCardImageInput.Text, ChooseMedCardExpiration.Value)).Save();
+                    new DriverFile(LicenseImageInput.Text, ChooseLicenseExpiration.Value),
+                    new DriverFile(MVRImageInput.Text, ChooseMVRExpiration.Value),
+                    new DriverFile(MedCardImageInput.Text, ChooseMedCardExpiration.Value)).Save();
             }
 
             this.Close();

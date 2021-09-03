@@ -52,7 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\Dialogs.cs" />
+    <Compile Include="Common\Connections.cs" />
     <Compile Include="Pages\AddDriver.cs">
       <SubType>Form</SubType>
     </Compile>

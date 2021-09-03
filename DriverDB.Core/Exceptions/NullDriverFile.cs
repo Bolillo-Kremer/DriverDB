@@ -2,21 +2,21 @@
 
 namespace DriverDB.Core.Exceptions
 {
-    public class NullDriverImage : Exception
+    public class NullDriverFile : Exception
     {
         #region Constructors
 
         /// <summary>
-        /// Creates new <see cref="NullDriverImage"/>
+        /// Creates new <see cref="NullDriverFile"/>
         /// </summary>
-        public NullDriverImage() : base("Cannot update Driver with null DriverImage")
+        public NullDriverFile() : base("Cannot update Driver with null DriverImage")
         { }
 
         /// <summary>
         /// Creates new <see cref="MissingRootDirectory"/>
         /// </summary>
         /// <param name="Message"></param>
-        public NullDriverImage(string Message) : base(Message)
+        public NullDriverFile(string Message) : base(Message)
         { }
 
         #endregion Constructors

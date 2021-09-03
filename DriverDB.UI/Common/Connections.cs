@@ -1,15 +1,17 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Forms;
+using DriverDB.Core;
 
 namespace DriverDB.UI
 {
-    public class Dialogs
+    public class Connections
     {
         #region Properties
 
         public static CommonFileDialogFilter ImageFilter = new CommonFileDialogFilter("Image Files", "*.png; *.PNG; *.jpg *.JPG *.jpeg *JPEG");
 
         #endregion Properties
+
         /// <summary>
         /// Gets file or directory
         /// </summary>

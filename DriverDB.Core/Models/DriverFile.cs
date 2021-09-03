@@ -9,14 +9,14 @@ namespace DriverDB.Core
     ///<summary>
     ///Stores data about driver images
     ///</summary>
-    public class DriverImage
+    public class DriverFile
     {
         #region Properties
 
         /// <summary>
-        /// The Type of <see cref="DriverImage"/>
+        /// The Type of <see cref="DriverFile"/>
         /// </summary>
-        public ImageType DriverImageType;
+        public DriverFileType FileType;
 
         private string filePath;
         /// <summary>
@@ -41,11 +41,11 @@ namespace DriverDB.Core
         #region Constructors
 
         /// <summary>
-        /// Creates a new <see cref="DriverImage"/>
+        /// Creates a new <see cref="DriverFile"/>
         /// </summary>
         /// <param name="aFilePath">The path to the image file</param>
         /// <param name="aExpirationDate">The expiration date</param>
-        public DriverImage(string aFilePath, DateTime aExpirationDate)
+        public DriverFile(string aFilePath, DateTime aExpirationDate)
         {
             if (File.Exists(aFilePath))
             {
@@ -60,12 +60,12 @@ namespace DriverDB.Core
         }
 
         /// <summary>
-        /// Creates a new <see cref="DriverImage"/>
+        /// Creates a new <see cref="DriverFile"/>
         /// </summary>
         /// <param name="aFilePath">The path to the image file</param>
         /// <param name="aExpirationDate">The expiration date</param>
-        /// <param name="aImageType">The Type of <see cref="DriverImage"/></param>
-        public DriverImage(string aFilePath, DateTime aExpirationDate, ImageType aImageType)
+        /// <param name="aFileType">The Type of <see cref="DriverFile"/></param>
+        public DriverFile(string aFilePath, DateTime aExpirationDate, DriverFileType aFileType)
         {
             if (File.Exists(aFilePath))
             {
@@ -77,7 +77,7 @@ namespace DriverDB.Core
                 throw new MissingFile(aFilePath);
             }
             this.expirationDate = aExpirationDate;
-            this.DriverImageType = aImageType;
+            this.FileType = aFileType;
         }
 
         #endregion Constructors
@@ -85,7 +85,7 @@ namespace DriverDB.Core
         #region Methods
 
         /// <summary>
-        /// Checks if this <see cref="DriverImage"/> is expired
+        /// Checks if this <see cref="DriverFile"/> is expired
         /// </summary>
         /// <returns>True if expired</returns>
         public bool IsExpired()
@@ -94,9 +94,9 @@ namespace DriverDB.Core
         }
 
         /// <summary>
-        /// Checks the number of days until this <see cref="DriverImage"/> expires
+        /// Checks the number of days until this <see cref="DriverFile"/> expires
         /// </summary>
-        /// <returns>the number of days until this <see cref="DriverImage"/> expires</returns>
+        /// <returns>the number of days until this <see cref="DriverFile"/> expires</returns>
         public int DaysUntilExpired()
         {
             return (this.expirationDate - DateTime.Now).Days;
@@ -106,20 +106,33 @@ namespace DriverDB.Core
         /// Saves the image to a given path
         /// </summary>
         /// <param name="SaveDir">The directory to save the image to</param>
-        public void SaveImage(string SaveDir)
+        public void SaveToCurrent(string SaveDir)
         {
             if (!Path.GetFullPath(SaveDir).Equals(this.filePath))
             {
-                if (File.Exists(SaveDir))
-                {
-                    File.Delete(SaveDir);
-                }
-                Image NewImage = Image.FromFile(this.filePath);
-                NewImage.Save(SaveDir);
-                NewImage.Dispose();
+                FileStream OldFile = File.OpenRead(this.filePath);
+                FileStream NewFile = File.Create(SaveDir);
+                OldFile.CopyTo(NewFile);
+                OldFile.Dispose();
+                NewFile.Dispose();
                 this.filePath = SaveDir;
             }
         }
+
+        public void SaveToOld(string SaveDir)
+        {
+            if (!Path.GetFullPath(SaveDir).Equals(this.filePath))
+            {
+                FileStream OldFile = File.OpenRead(this.filePath);
+                FileStream NewFile = File.Create(SaveDir);
+                OldFile.CopyTo(NewFile);
+                OldFile.Dispose();
+                NewFile.Dispose();
+                File.Delete(this.filePath);
+                this.filePath = SaveDir;
+            }
+        }
+
         #endregion Methods
 
         #region Overrides

@@ -306,7 +306,7 @@ namespace DriverDB.UI
         private System.Windows.Forms.Label daysLbl;
         private System.Windows.Forms.NumericUpDown SelectExpiredWithin;
         private System.Windows.Forms.ToolStripMenuItem RefreshDatabase;
-        private System.Windows.Forms.Button Refresh;
+        private new System.Windows.Forms.Button Refresh;
         private System.Windows.Forms.ToolStripMenuItem SearchOld;
     }
 }

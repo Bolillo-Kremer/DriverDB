@@ -21,55 +21,55 @@ namespace DriverDB.UI
             InitializeComponent();
             SelectImageType.SelectedItem = "All";
             SelectSortBy.SelectedItem = "Expiration Date Ascending";
+            StartDate.Value = DateTime.Today.AddMonths(-1);
+            EndDate.Value = DateTime.Today.AddDays(5);
         }
 
         #endregion Constructors
 
         #region Methods
 
-        private void RefreshData()
+        private void PopulateData()
         {
             OldDrivers.Items.Clear();
-            try
-            {
-                Driver SelectedDriver = Driver.GetExisting(DriverNameText.Text);
+            Driver SelectedDriver = Driver.GetExisting(DriverNameText.Text);
 
-                foreach(DriverImage OldImage in SortTable(SelectedDriver.OldDriverImages))
+            if (SelectedDriver != null)
+            {
+                foreach (DriverFile OldImage in SortTable(SelectedDriver.OldDriverImages))
                 {
                     if (OldImage.ExpirationDate >= StartDate.Value && OldImage.ExpirationDate <= EndDate.Value)
                     {
                         ListViewItem ListItem = new ListViewItem(new[]
-{
+                        {
                                     SelectedDriver.DriverName,
-                                    OldImage.DriverImageType.ToString(),
+                                    OldImage.FileType.ToString(),
                                     OldImage.ExpirationDate.ToString("MM/dd/yyyy"),
                                     OldImage.FilePath
-                        });
+                            });
 
                         if (SelectImageType.SelectedItem.ToString() == "All")
                         {
                             OldDrivers.Items.Add(ListItem);
                         }
-                        else if (OldImage.DriverImageType.ToString() == SelectImageType.SelectedItem.ToString().Replace(" ", ""))
+                        else if (OldImage.FileType.ToString() == SelectImageType.SelectedItem.ToString().Replace(" ", ""))
                         {
                             OldDrivers.Items.Add(ListItem);
                         }
                     }
                 }
             }
-            catch 
-            { }
         }
 
-        private List<DriverImage> SortTable(List<DriverImage> DriverImages)
+        private List<DriverFile> SortTable(List<DriverFile> DriverImages)
         {
-            List<DriverImage> Sorted = new List<DriverImage>();
+            List<DriverFile> Sorted = new List<DriverFile>();
 
             while (DriverImages.Count != 0)
             {
-                DriverImage Compared = DriverImages.First();
+                DriverFile Compared = DriverImages.First();
 
-                foreach (DriverImage aDriverImage in DriverImages)
+                foreach (DriverFile aDriverImage in DriverImages)
                 {
                     switch (SelectSortBy.SelectedItem.ToString())
                     {
@@ -93,11 +93,6 @@ namespace DriverDB.UI
 
         #region Event Methods
 
-        private void Search_Click(object sender, EventArgs e)
-        {
-            RefreshData();
-        }
-
         private void OldDrivers_DoubleClick(object sendr, EventArgs e)
         {
             using (Process FileOpener = new Process())
@@ -107,11 +102,32 @@ namespace DriverDB.UI
                 FileOpener.Start();
             }             
         }
-        #endregion Event Methods
 
-        private void OldDrivers_SelectedIndexChanged(object sender, EventArgs e)
+        private void DriverNameText_TextChanged(object sender, EventArgs e)
         {
-
+            PopulateData();
         }
+
+        private void SelectImageType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopulateData();
+        }
+
+        private void StartDate_ValueChanged(object sender, EventArgs e)
+        {
+            PopulateData();
+        }
+
+        private void EndDate_ValueChanged(object sender, EventArgs e)
+        {
+            PopulateData();
+        }
+
+        private void SelectSortBy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopulateData();
+        }
+
+        #endregion Event Methods
     }
 }
