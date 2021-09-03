@@ -36,7 +36,7 @@ namespace DriverDB.UI
 
         #region Initiator Methods
 
-        private static ListViewItem CreateListItem(Driver aDriver, string DateFormat = "MM/dd/yyyy")
+        private static ListViewItem CreateListItem(Driver aDriver, int Days = 0, string DateFormat = "MM/dd/yyyy")
         {
             ListViewItem ListItem = new ListViewItem(new[]
             {
@@ -46,19 +46,19 @@ namespace DriverDB.UI
                     aDriver.MedicalCard.ExpirationDate.ToString(DateFormat)
             });
 
-            if (aDriver.License.IsExpired())
+            if (aDriver.License.ExpirationDate <= DateTime.Today.AddDays(Days + 1))
             {
                 ListItem.SubItems[1].BackColor = Color.FromKnownColor(KnownColor.Red);
                 ListItem.SubItems[1].ForeColor = Color.FromKnownColor(KnownColor.White);
             }
 
-            if (aDriver.MVR.IsExpired())
+            if (aDriver.MVR.ExpirationDate <= DateTime.Today.AddDays(Days + 1))
             {
                 ListItem.SubItems[2].BackColor = Color.FromKnownColor(KnownColor.Red);
                 ListItem.SubItems[2].ForeColor = Color.FromKnownColor(KnownColor.White);
             }
 
-            if (aDriver.MedicalCard.IsExpired())
+            if (aDriver.MedicalCard.ExpirationDate <= DateTime.Today.AddDays(Days + 1))
             {
                 ListItem.SubItems[3].BackColor = Color.FromKnownColor(KnownColor.Red);
                 ListItem.SubItems[3].ForeColor = Color.FromKnownColor(KnownColor.White);
@@ -81,9 +81,10 @@ namespace DriverDB.UI
         public void PopulateAlmostExpired()
         {
             AlmostExpired.Items.Clear();
-            foreach (Driver aDriver in Driver.ExpiresWithin((int)SelectExpiredWithin.Value))
+            int SelectedDays = (int)SelectExpiredWithin.Value - 1;
+            foreach (Driver aDriver in Driver.ExpiresWithin((int)SelectExpiredWithin.Value - 1))
             {
-                AlmostExpired.Items.Add(CreateListItem(aDriver));
+                AlmostExpired.Items.Add(CreateListItem(aDriver, SelectedDays));
             }
         }
 
