@@ -29,14 +29,14 @@ namespace DriverDB.UI
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("");
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NewDriver = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenDriver = new System.Windows.Forms.ToolStripMenuItem();
-            this.Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.SearchOld = new System.Windows.Forms.ToolStripMenuItem();
+            this.Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.databaseSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ChangeRoot = new System.Windows.Forms.ToolStripMenuItem();
             this.RefreshDatabase = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,30 +84,30 @@ namespace DriverDB.UI
             // NewDriver
             // 
             this.NewDriver.Name = "NewDriver";
-            this.NewDriver.Size = new System.Drawing.Size(206, 22);
+            this.NewDriver.Size = new System.Drawing.Size(191, 22);
             this.NewDriver.Text = "New";
             this.NewDriver.Click += new System.EventHandler(this.NewDriver_Click);
             // 
             // OpenDriver
             // 
             this.OpenDriver.Name = "OpenDriver";
-            this.OpenDriver.Size = new System.Drawing.Size(206, 22);
+            this.OpenDriver.Size = new System.Drawing.Size(191, 22);
             this.OpenDriver.Text = "Open";
             this.OpenDriver.Click += new System.EventHandler(this.OpenDriver_Click);
-            // 
-            // Exit
-            // 
-            this.Exit.Name = "Exit";
-            this.Exit.Size = new System.Drawing.Size(206, 22);
-            this.Exit.Text = "Exit";
-            this.Exit.Click += new System.EventHandler(this.Exit_Click);
             // 
             // SearchOld
             // 
             this.SearchOld.Name = "SearchOld";
-            this.SearchOld.Size = new System.Drawing.Size(206, 22);
-            this.SearchOld.Text = "Search Old Driver Images";
+            this.SearchOld.Size = new System.Drawing.Size(191, 22);
+            this.SearchOld.Text = "Search Old Driver Files";
             this.SearchOld.Click += new System.EventHandler(this.SearchOld_Click);
+            // 
+            // Exit
+            // 
+            this.Exit.Name = "Exit";
+            this.Exit.Size = new System.Drawing.Size(191, 22);
+            this.Exit.Text = "Exit";
+            this.Exit.Click += new System.EventHandler(this.Exit_Click);
             // 
             // databaseSettingsToolStripMenuItem
             // 
@@ -141,7 +141,7 @@ namespace DriverDB.UI
             this.MedCardExp});
             this.ExpiredDrivers.HideSelection = false;
             this.ExpiredDrivers.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem5});
+            listViewItem1});
             this.ExpiredDrivers.Location = new System.Drawing.Point(471, 75);
             this.ExpiredDrivers.Name = "ExpiredDrivers";
             this.ExpiredDrivers.Size = new System.Drawing.Size(431, 466);
@@ -197,7 +197,7 @@ namespace DriverDB.UI
             this.columnHeader4});
             this.AlmostExpired.HideSelection = false;
             this.AlmostExpired.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem6});
+            listViewItem2});
             this.AlmostExpired.Location = new System.Drawing.Point(12, 75);
             this.AlmostExpired.Name = "AlmostExpired";
             this.AlmostExpired.Size = new System.Drawing.Size(431, 466);
