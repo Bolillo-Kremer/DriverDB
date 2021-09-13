@@ -41,20 +41,17 @@ namespace DriverDB.UI
 
         private void ChooseLicenseImage_Click(object sender, EventArgs e)
         {
-            string Dir = Connections.OpenFile(this, Path.GetDirectoryName(LicenseImageInput.Text));
-            LicenseImageInput.Text = (Dir.Length > 0) ? Dir: LicenseImageInput.Text;
+            ChooseDir(LicenseImageInput);
         }
 
         private void ChooseMVRImage_Click(object sender, EventArgs e)
         {
-            string Dir = Connections.OpenFile(this, Path.GetDirectoryName(MVRImageInput.Text));
-            MVRImageInput.Text = (Dir.Length > 0) ? Dir : MVRImageInput.Text;
+            ChooseDir(MVRImageInput);
         }
 
         private void ChooseMedCardImage_Click(object sender, EventArgs e)
         {
-            string Dir = Connections.OpenFile(this, Path.GetDirectoryName(MedCardImageInput.Text));
-            MedCardImageInput.Text = (Dir.Length > 0) ? Dir : MedCardImageInput.Text;
+            ChooseDir(MedCardImageInput);
         }
 
         private void SaveDriver_Click(object sender, EventArgs e)
@@ -85,6 +82,13 @@ namespace DriverDB.UI
         #endregion Button Clicks
 
         #region Methods
+        private void ChooseDir(TextBox DirName)
+        {
+            string OldDir = DirName.Text.Trim().Length > 0 ? Path.GetDirectoryName(DirName.Text.Trim()) : "Documents";
+            string Dir = Connections.OpenFile(this, OldDir);
+            DirName.Text = (Dir.Length > 0) ? Dir : DirName.Text.Trim();
+        }
+
 
         private void CheckExpirationDates()
         {
